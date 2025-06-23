@@ -12,7 +12,7 @@ class AdminModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load routes, views, migrations from the package
-        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
