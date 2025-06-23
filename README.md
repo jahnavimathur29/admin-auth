@@ -21,7 +21,7 @@ To use the package from a local or VCS path, add the following to your `composer
 "repositories": [
     {
         "type": "vcs",
-        "url": "https://github.com/jahnavimathur29/admin-auth.git"
+        "url": "https://github.com/jahnavimathur29/admin-faqs.git"
     }
 ]
 ```
