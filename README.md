@@ -25,6 +25,9 @@ To use the package from a local or VCS path, add the following to your `composer
     }
 ]
 ```
+
+---
+
 ## 📦 Installation
 
 ```json
@@ -32,10 +35,14 @@ composer require admin/admin_auth
 
 ```
 
+---
+
 ## 🚀 Usage
 ```json
 php artisan vendor:publish --provider="admin\\admin_auth\\AdminModuleServiceProvider"
 ```
+
+---
 
 ## Run migrations:
 ```json
@@ -48,3 +55,4 @@ Route::middleware(['admin.auth'])->group(function () {
     // Admin routes here
 });
 ```
+---
