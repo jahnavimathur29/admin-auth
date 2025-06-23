@@ -24,9 +24,27 @@ To use the package from a local or VCS path, add the following to your `composer
         "url": "https://github.com/jahnavimathur29/admin-auth.git"
     }
 ]
----
+```
 ## 📦 Installation
+
+```json
 composer require admin/admin_auth
 
+```
+
 ## 🚀 Usage
-php artisan vendor:publish --provider="admin\admin_auth\AdminModuleServiceProvider"
+```json
+php artisan vendor:publish --provider="admin\\admin_auth\\AdminModuleServiceProvider"
+```
+
+## Run migrations:
+```json
+php artisan migrate
+```
+
+## Protect admin routes using middleware:
+```json
+Route::middleware(['admin.auth'])->group(function () {
+    // Admin routes here
+});
+```
