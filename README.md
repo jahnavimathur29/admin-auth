@@ -39,22 +39,6 @@ composer require admin/admin_auth
 
 ## 🚀 Usage
 ```json
-php artisan vendor:publish --provider="admin\\admin_auth\\AdminModuleServiceProvider"
-```
-
----
-
-## Run migrations:
-```json
+php artisan vendor:publish --tag=faq
 php artisan migrate
 ```
-
----
-
-## Protect admin routes using middleware:
-```json
-Route::middleware(['admin.auth'])->group(function () {
-    // Admin routes here
-});
-```
----
