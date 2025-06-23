@@ -12,7 +12,8 @@ class AdminModuleServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load routes, views, migrations from the package
-        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        // $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->registerAdminRoutes();
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
@@ -22,24 +23,22 @@ class AdminModuleServiceProvider extends ServiceProvider
             __DIR__ . '/../resources/css/backend' => public_path('backend'),
         ], 'admin_auth');
 
-        // $this->registerAdminRoutes();
-
     }
 
-    // protected function registerAdminRoutes()
-    // {
-    //     if (!Schema::hasTable('admins')) {
-    //         return; // Avoid errors before migration
-    //     }
+    protected function registerAdminRoutes()
+    {
+        if (!Schema::hasTable('admins')) {
+            return; // Avoid errors before migration
+        }
 
-    //     $slug = DB::table('admins')->latest()->value('website_slug') ?? 'admin';
+        $slug = DB::table('admins')->latest()->value('website_slug') ?? 'admin';
 
-    //     Route::middleware('web')
-    //         ->prefix("{$slug}/admin") // dynamic prefix
-    //         ->group(function () {
-    //             $this->loadRoutesFrom(__DIR__.'/routes/web.php');
-    //         });
-    // }
+        Route::middleware('web')
+            ->prefix("{$slug}/admin") // dynamic prefix
+            ->group(function () {
+                $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+            });
+    }
 
     public function register()
     {
