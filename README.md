@@ -21,6 +21,12 @@ To use the package from a local or VCS path, add the following to your `composer
 "repositories": [
     {
         "type": "vcs",
-        "url": "https://github.com/pavanraj92/admin-auth.git"
+        "url": "https://github.com/jahnavimathur29/admin-auth.git"
     }
 ]
+---
+## 📦 Installation
+composer require admin/admin_auth
+
+## 🚀 Usage
+php artisan vendor:publish --provider="admin\admin_auth\AdminModuleServiceProvider"
