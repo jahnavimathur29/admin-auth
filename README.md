@@ -49,6 +49,8 @@ php artisan vendor:publish --provider="admin\\admin_auth\\AdminModuleServiceProv
 php artisan migrate
 ```
 
+---
+
 ## Protect admin routes using middleware:
 ```json
 Route::middleware(['admin.auth'])->group(function () {
