@@ -37,7 +37,7 @@
                                             $displayName = config('constants.package_display_names.' . $route, $route);
                                         @endphp
                                         <button type="button"
-                                            class="btn btn-outline-{{ $installed ? 'danger' : 'success' }} toggle-btn"
+                                            class="btn btn-outline-{{ $installed ? 'danger' : 'success' }} install-uninstall-btn"
                                             data-package="{{ $route }}" data-name="{{ $displayName }}"
                                             data-action="{{ $installed ? 'uninstall' : 'install' }}">
                                             {{ $installed ? 'Uninstall' : 'Install' }}
@@ -54,7 +54,7 @@
 @endsection
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.toggle-btn').forEach(function(button) {
+        document.querySelectorAll('.install-uninstall-btn').forEach(function(button) {
             button.addEventListener('click', function(e) {
                 e.preventDefault();
                 const form = this.closest('form');

@@ -20,7 +20,7 @@ class PackageController extends Controller
     }
 
 
-    public function toggle(Request $request, $vendor, $package)
+    public function installUninstallPackage(Request $request, $vendor, $package)
     {
         try {
             $packagePath = base_path("vendor/{$vendor}/{$package}");
