@@ -80,16 +80,16 @@ class PackageController extends Controller
 
     protected function removePublishedFiles($package)
     {
-        $paths = [
-            config_path("{$package}.php"),
-            public_path("vendor/{$package}"),
-            resource_path("views/vendor/{$package}"),
-            base_path("routes/{$package}.php"),
-        ];
+        $singular = rtrim($package, 's');
+        $pascalCase = str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $singular)));
 
-        // Delete matching migration files
-        $migrationFiles = glob(database_path("migrations/*{$package}*.php"));
-        $paths = array_merge($paths, $migrationFiles);
+        $paths = [
+            config_path("constants/{$singular}.php"),
+            resource_path("views/admin/{$singular}"),
+            app_path("Http/Controllers/Admin/{$pascalCase}Manager"),
+            app_path("Models/Admin/{$pascalCase}"),
+            base_path("routes/admin/admin_{$singular}.php"),
+        ];
 
         foreach ($paths as $path) {
             if (file_exists($path)) {
