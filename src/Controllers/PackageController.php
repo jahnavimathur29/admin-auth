@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Schema;
 
 class PackageController extends Controller
 {
@@ -36,7 +37,7 @@ class PackageController extends Controller
 
                 if ($exitCode === 0) {
                     // Remove published files
-                    $this->removePublishedFiles($package);
+                    $this->removePublishedFiles($vendor, $package);
                     Artisan::call('optimize:clear');
                     $message = "Package '{$vendor}/{$package}' uninstalled successfully.";
                 } else {
@@ -53,6 +54,10 @@ class PackageController extends Controller
                 $output = ob_get_clean();
                 if ($exitCode === 0) {
                     Artisan::call('optimize:clear');
+                    Artisan::call('migrate', [
+                        '--path' => "vendor/{$vendor}/{$package}/database/migrations",
+                        '--force' => true,
+                    ]);
                     $message = "Package '{$vendor}/{$package}' installed successfully.";
                 } else {
                     $message = "❌Composer failed. Output:\n" . $output;
@@ -78,7 +83,7 @@ class PackageController extends Controller
         }
     }
 
-    protected function removePublishedFiles($package)
+    protected function removePublishedFiles($vendor, $package)
     {
         $singular = rtrim($package, 's');
         $pascalCase = str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $singular)));
@@ -96,6 +101,13 @@ class PackageController extends Controller
                 is_dir($path) ? \File::deleteDirectory($path) : \File::delete($path);
             }
         }
-    }
 
+        if (Schema::hasTable('pages')) {
+            Schema::drop('pages');
+        }
+        
+        \DB::table('migrations')
+          ->where('migration', 'like', '%create_'.$package.'_table%')
+          ->delete();
+    }
 }
