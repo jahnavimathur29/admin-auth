@@ -35,10 +35,12 @@ class PackageController extends Controller
                 $output = ob_get_clean();
 
                 if ($exitCode === 0) {
+                    // Remove published files
+                    $this->removePublishedFiles($package);
                     Artisan::call('optimize:clear');
                     $message = "Package '{$vendor}/{$package}' uninstalled successfully.";
                 } else {
-                    $message = "❌ Composer failed. Output:\n" . $output;
+                    $message = "❌Composer failed. Output:\n" . $output;
                     return response()->json([
                         'status' => 'error',
                         'message' => $message
@@ -53,7 +55,7 @@ class PackageController extends Controller
                     Artisan::call('optimize:clear');
                     $message = "Package '{$vendor}/{$package}' installed successfully.";
                 } else {
-                    $message = "❌ Composer failed. Output:\n" . $output;
+                    $message = "❌Composer failed. Output:\n" . $output;
                     return response()->json([
                         'status' => 'error',
                         'message' => $message
@@ -73,6 +75,26 @@ class PackageController extends Controller
             }
 
             return back()->with('error', $e->getMessage());
+        }
+    }
+
+    protected function removePublishedFiles($package)
+    {
+        $paths = [
+            config_path("{$package}.php"),
+            public_path("vendor/{$package}"),
+            resource_path("views/vendor/{$package}"),
+            base_path("routes/{$package}.php"),
+        ];
+
+        // Delete matching migration files
+        $migrationFiles = glob(database_path("migrations/*{$package}*.php"));
+        $paths = array_merge($paths, $migrationFiles);
+
+        foreach ($paths as $path) {
+            if (file_exists($path)) {
+                is_dir($path) ? \File::deleteDirectory($path) : \File::delete($path);
+            }
         }
     }
 
