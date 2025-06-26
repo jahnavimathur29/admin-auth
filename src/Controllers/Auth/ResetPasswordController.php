@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Admin\Http\Controllers\Auth;
+namespace admin\admin_auth\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -10,11 +10,12 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Carbon\Carbon;
-use Modules\Admin\Models\Admin;
+use admin\admin_auth\Models\Admin;
+use admin\admin_auth\Requests\ResetPasswordRequest;
 
 class ResetPasswordController extends Controller
 {
-    public function resetPassword($token)
+    public function resetPassword(Request $request, $token)
     {
         $checkTokenExpired = DB::table('admin_password_resets')
                                     ->where('token','=', $token)
@@ -25,22 +26,12 @@ class ResetPasswordController extends Controller
             Session::flash('linked-expired', 'Reset password link is expired.'); 
         } 
 
-        return view('admin::admin.auth.reset-password', ['token' => $token]);
+        return view('admin::admin.auth.reset-password', ['token' => $token, 'email' => $request->query('email')]);
 
     }
 
-    public function postResetPassword(Request $request)
-    {
-
-        $request->validate([
-            'token' => 'required',
-            'email' => 'required|email',
-            //'password' => 'required|min:6|confirmed',
-            'password' => [ 'required', 'min:6', 'confirmed'],
-        ]);
-
-        //$userID = base64_decode($request->token);
-        
+    public function postResetPassword(ResetPasswordRequest $request)
+    {        
         $checkTokenExpired = DB::table('admin_password_resets')
                 ->where('token','=',$request->token)
                 ->where('created_at','>',Carbon::now()->subHours(2))
@@ -53,7 +44,8 @@ class ResetPasswordController extends Controller
             if ($userExists) {            
                 $admin = Admin::where('id', $userExists->id)->update(['password' => Hash::make($request->password)]);
                 DB::table('admin_password_resets')->where('token','=',$request->token)->delete();
-                return redirect('/admin/login')->with(['success' => "Password udpated successfully. Please login here"]);
+                $slug = DB::table('admins')->select('website_slug')->first();
+                return redirect($slug->website_slug . '/admin/login')->with(['success' => "Password updated successfully. Please login here"]);
             } else {
                 return  back()->withErrors(['email' => 'Something went wrong. Please try later']);
             }

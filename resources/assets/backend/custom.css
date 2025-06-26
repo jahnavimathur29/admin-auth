@@ -28,3 +28,20 @@
     max-height: 250px !important;
     overflow-y: auto;
 }
+
+.left-sidebar {
+    min-height: 100vh;
+    background: #263544;
+    color: #fff;
+}
+.sidebar-bottom-link {
+    border-top: 1px solid #2a3f54;
+    background: #263544;
+}
+.sidebar-bottom-link .sidebar-link {
+    color: #fff;
+}
+.sidebar-bottom-link .sidebar-link:hover {
+    color: #ffffff;
+    text-decoration: none;
+}

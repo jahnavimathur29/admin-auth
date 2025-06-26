@@ -13,15 +13,16 @@ class AdminModuleServiceProvider extends ServiceProvider
     {
         // Load routes, views, migrations from the package
         // $this->loadRoutesFrom(__DIR__.'/routes/web.php');
-        $this->registerAdminRoutes();
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'admin');
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
 
         $this->publishes([  
             __DIR__.'/../resources/views' => resource_path('views/vendor/admin_auth'),
-            __DIR__ . '/../resources/css/backend' => public_path('backend'),
+            __DIR__ . '/../resources/assets/backend' => public_path('backend'),
         ], 'admin_auth');
+
+        $this->registerAdminRoutes();
 
     }
 

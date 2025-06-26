@@ -5,13 +5,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
+    <meta name="description" content="@yield('meta_description', 'This is admin panel')">
     <meta name="author" content="">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/favicon.png">
     <title>@yield('title', 'Admin Panel')</title>
     <link href="{{ asset('backend/assets/libs/chartist/dist/chartist.min.css') }}" rel="stylesheet">
     <link href="{{ asset('backend/dist/css/style.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('backend/custom.css') }}" rel="stylesheet">
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -97,8 +98,8 @@
             </nav>
         </header>
 
-        <aside class="left-sidebar" data-sidebarbg="skin5">
-            <div class="scroll-sidebar">
+        <aside class="left-sidebar d-flex flex-column" data-sidebarbg="skin5">
+            <div class="scroll-sidebar flex-grow-1"  style="overflow-y: auto;">
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav">
                         <li class="sidebar-item">
@@ -137,8 +138,33 @@
                             </a>
                         </li>
                         @endif
+                        @if (Route::has('admin.settings.index'))
+                        <li class="sidebar-item {{ Route::is('admin.settings.*') ? 'selected' : '' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link {{ Route::is('admin.faqs.*') ? 'active' : '' }}"
+                                href="{{ route('admin.settings.index') }}" aria-expanded="false">
+                                <i class="fas fa-cog"></i>
+                                <span class="hide-menu">Setting Manager</span>
+                            </a>
+                        </li>
+                        @endif
+                        @if (Route::has('admin.banners.index'))
+                        <li class="sidebar-item">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link"
+                                href="{{ route('admin.banners.index') }}" aria-expanded="false">
+                                <i class="fas fa-image"></i>
+                                <span class="hide-menu">Banner Manager</span>
+                            </a>
+                        </li>
+                        @endif
+
                     </ul>
                 </nav>
+            </div>
+            <div class="sidebar-bottom-link p-3">
+                <a class="sidebar-link d-flex align-items-center" href="{{ route('admin.packages') }}">
+                    <i class="fas fa-box mr-2"></i>
+                    <span class="hide-menu">Package Setting</span>
+                </a>
             </div>
         </aside>
         <div class="page-wrapper">

@@ -1,16 +1,16 @@
 <?php
 
-namespace Modules\Admin\Http\Controllers\Auth;
+namespace admin\admin_auth\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Modules\Admin\Models\Admin;
+use admin\admin_auth\Models\Admin;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
-use Modules\Admin\Mail\ForgotPasswordMail;
+use admin\admin_auth\Mail\ForgotPasswordMail;
 
 class ForgotPasswordController extends Controller
 {
@@ -25,7 +25,6 @@ class ForgotPasswordController extends Controller
             'email' => 'required|email:rfc,dns',            
         ]);
 
-        $this->validateEmail($request);
         $admin = Admin::where('email', $request->email)->first();
 
         if(!$admin){
@@ -48,11 +47,6 @@ class ForgotPasswordController extends Controller
             $mail_status = Mail::to($admin->email)->send(new ForgotPasswordMail($admin));
             return redirect()->route('admin.forgotPassword')->with(['success' => "We have emailed you password reset link!"]);
         }
-    }
-
-    protected function validateEmail(Request $request)
-    {
-        $request->validate(['email' => 'required|email']);
     }
 
 }
