@@ -84,7 +84,7 @@ class PackageController extends Controller
         $pascalCase = str_replace(' ', '', ucwords(str_replace(['-', '_'], ' ', $singular)));
 
         $paths = [
-            config_path("constants/{$singular}.php"),
+            config_path("constants/admin/{$singular}.php"),
             resource_path("views/admin/{$singular}"),
             app_path("Http/Controllers/Admin/{$pascalCase}Manager"),
             app_path("Models/Admin/{$pascalCase}"),
